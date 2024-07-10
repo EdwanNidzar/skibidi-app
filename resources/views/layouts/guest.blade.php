@@ -6,6 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
+        <link rel="icon" href="{{ asset('images/logo-bawaslu.png') }}">
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
         <!-- Scripts -->
