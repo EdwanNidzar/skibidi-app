@@ -44,4 +44,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function suratKerjaAssignBy()
+    {
+        return $this->hasMany(SuratKerja::class, 'assign_by');
+    }
+
+    public function suratKerjaAssignTo()
+    {
+        return $this->hasMany(SuratKerja::class, 'assign_to');
+    }
 }
