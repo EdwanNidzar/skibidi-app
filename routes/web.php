@@ -3,6 +3,7 @@
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ParpolController;
+use App\Http\Controllers\JenisPelanggaranContoller;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,5 +36,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource('parpols', ParpolController::class)->middleware(['auth', 'verified']);
+
+Route::resource('jenispelanggarans', JenisPelanggaranContoller::class)->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';

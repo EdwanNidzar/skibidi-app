@@ -40,6 +40,18 @@
       </li>
 
       <li class="relative px-6 py-3">
+        <x-responsive-nav-link href="{{ route('jenispelanggarans.index') }}" :active="request()->routeIs('jenispelanggarans.*')">
+          <x-slot name="icon">
+            <svg class="w-5 h-5" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"
+              stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+              <path d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+            </svg>
+          </x-slot>
+          {{ __('Jenis Pelanggaran') }}
+        </x-responsive-nav-link>
+      </li>
+
+      <li class="relative px-6 py-3">
         <x-responsive-nav-link href="{{ route('users.index') }}" :active="request()->routeIs('users.index')">
           <x-slot name="icon">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
