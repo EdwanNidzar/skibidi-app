@@ -12,7 +12,7 @@ class JenisPelanggaranContoller extends Controller
      */
     public function index()
     {
-        $jenispelanggarans = JenisPelanggaran::paginate(5);
+        $jenispelanggarans = JenisPelanggaran::withCount('pelanggaran')->paginate(5);
         return view('jenispelanggarans.index', compact('jenispelanggarans'));
     }
 
