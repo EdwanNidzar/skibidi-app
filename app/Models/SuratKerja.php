@@ -33,4 +33,9 @@ class SuratKerja extends Model
     {
         return $this->belongsTo(User::class, 'assign_to');
     }
+
+    public function pelanggaran()
+    {
+        return $this->hasMany(Pelanggaran::class);
+    }
 }

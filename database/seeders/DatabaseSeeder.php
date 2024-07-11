@@ -19,7 +19,9 @@ class DatabaseSeeder extends Seeder
             // UserSeeder::class,
             // ParpolSeeder::class,
             // JenisPelanggaranSeeder::class,
-            SuratKerjaSeeder::class,
+            // SuratKerjaSeeder::class,
+            // PelanggaranSeeder::class,
+            PelanggaranImagesSeeder::class,
         ]);
     }
 }

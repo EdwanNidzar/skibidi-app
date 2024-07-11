@@ -12,4 +12,9 @@ class JenisPelanggaran extends Model
     protected $fillable = [
         'jenis_pelanggaran'
     ];
+
+    public function pelanggaran()
+    {
+        return $this->hasMany(Pelanggaran::class);
+    }
 }

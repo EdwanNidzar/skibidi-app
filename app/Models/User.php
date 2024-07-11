@@ -54,4 +54,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(SuratKerja::class, 'assign_to');
     }
+
+    public function pelanggaran()
+    {
+        return $this->hasMany(Pelanggaran::class, 'pelapor_id');
+    }
 }
