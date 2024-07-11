@@ -56,4 +56,9 @@ class District extends Model
     {
         return $this->hasMany(Village::class);
     }
+    public function laporanPelanggaran()
+    {
+        return $this->hasMany(LaporanPelanggaran::class);
+    }
+    
 }

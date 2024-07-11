@@ -46,4 +46,9 @@ class Pelanggaran extends Model
         return $this->hasMany(PelanggaranImages::class);
     }
 
+    public function laporanPelanggaran()
+    {
+        return $this->hasOne(LaporanPelanggaran::class);
+    }
+
 }

@@ -59,4 +59,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Pelanggaran::class, 'pelapor_id');
     }
+
+    public function laporanPelanggaranAssignBy()
+    {
+        return $this->hasMany(LaporanPelanggaran::class, 'assign_by');
+    }
+
+    public function laporanPelanggaranVerifiedBy()
+    {
+        return $this->hasMany(LaporanPelanggaran::class, 'verif_by');
+    }
 }
