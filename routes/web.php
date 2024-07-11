@@ -7,6 +7,7 @@ use App\Http\Controllers\JenisPelanggaranContoller;
 use App\Http\Controllers\SuratKerjaContoller;
 use App\Http\Controllers\PelanggaranContoller;
 use App\Http\Controllers\LaporanPelanggaranController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,7 +39,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource('parpols', ParpolController::class)->middleware(['auth', 'verified']);
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('parpols', ParpolController::class);
+    Route::get('printAllParpols', [ReportController::class, 'printAllParpols'])->name('printAllParpols');
+    Route::get('printAllParpolsById/{id}', [ReportController::class, 'printAllParpolsById'])->name('printAllParpolsById');
+});
 
 Route::resource('jenispelanggarans', JenisPelanggaranContoller::class)->middleware(['auth', 'verified']);
 

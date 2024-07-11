@@ -14,7 +14,7 @@ class ParpolController extends Controller
      */
     public function index()
     {
-        $parpols = Parpol::paginate(5);
+        $parpols = Parpol::withCount('pelanggaran')->paginate(5);
         return view('parpols.index', compact('parpols'));
     }
 

@@ -41,7 +41,17 @@
     @endif
     <!-- End of alert section -->
 
-    <div class="flex justify-end mb-4">
+    <div class="flex justify-end mb-4 gap-2">
+      <a href="{{ route('printAllParpols') }}" target="_blank"
+        class="flex items-center px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green ml-2">
+        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+          width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+          <path fill-rule="evenodd"
+            d="M8 3a2 2 0 0 0-2 2v3h12V5a2 2 0 0 0-2-2H8Zm-3 7a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h1v-4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v4h1a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2H5Zm4 11a1 1 0 0 1-1-1v-4h8v4a1 1 0 0 1-1 1H9Z"
+            clip-rule="evenodd" />
+        </svg>
+        Cetak Data Partai
+      </a>
       <a href="{{ route('parpols.create') }}"
         class="flex items-center px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-blue-600 border border-transparent rounded-lg active:bg-blue-600 hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue">
         <svg class="w-6 h-6 text-gray-800 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -61,6 +71,7 @@
               <th class="px-4 py-3">Photo Partai</th>
               <th class="px-4 py-3">Nomor Partai</th>
               <th class="px-4 py-3">Nama Partai</th>
+              <th class="px-4 py-3">Total Pelanggaran</th>
               <th class="px-4 py-3">Action</th>
             </tr>
           </thead>
@@ -71,11 +82,14 @@
                   <img src="{{ asset('storage/parpols/' . $parpol->parpol_picture) }}" alt="{{ $parpol->parpol_name }}"
                     class="w-20 h-20 object-cover rounded-lg">
                 </td>
-                <td class="px-4 py-3 text-sm">
+                <td class="px-4 py-3 text-sm text-center">
                   {{ $parpol->parpol_number }}
                 </td>
                 <td class="px-4 py-3 text-sm">
                   {{ $parpol->parpol_name }}
+                </td>
+                <td class="px-4 py-3 text-sm text-center">
+                  {{ $parpol->pelanggaran_count }}
                 </td>
                 <td class="px-4 py-3 text-sm flex space-x-2">
                   <a href="{{ route('parpols.show', $parpol->id) }}"
@@ -88,6 +102,18 @@
                       <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                     </svg>
                   </a>
+
+                  <a href="{{ route('printAllParpolsById', $parpol->id) }}" target="_blank"
+                    class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-600 border border-transparent rounded-lg active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-green">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                      viewBox="0 0 24 24">
+                      <path fill-rule="evenodd"
+                        d="M8 3a2 2 0 0 0-2 2v3h12V5a2 2 0 0 0-2-2H8Zm-3 7a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h1v-4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v4h1a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2H5Zm4 11a1 1 0 0 1-1-1v-4h8v4a1 1 0 0 1-1 1H9Z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </a>
+
                   <a href="{{ route('parpols.edit', $parpol->id) }}"
                     class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-yellow-400 border border-transparent rounded-lg active:bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:shadow-outline-yellow">
                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
