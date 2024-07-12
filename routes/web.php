@@ -59,6 +59,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('pelanggarans', PelanggaranContoller::class);
+    Route::get('printAllPelanggarans', [ReportController::class, 'printAllPelanggarans'])->name('printAllPelanggarans');    
+    Route::get('printAllPelanggaransById/{id}', [ReportController::class, 'printAllPelanggaransById'])->name('printAllPelanggaransById');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
