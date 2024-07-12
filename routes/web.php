@@ -51,7 +51,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('printAllJenisPelanggaransById/{id}', [ReportController::class, 'printAllJenisPelanggaransById'])->name('printAllJenisPelanggaransById');
 });
 
-Route::resource('suratkerjas', SuratKerjaContoller::class)->middleware(['auth', 'verified']);
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('suratkerjas', SuratKerjaContoller::class);
+    Route::get('printAllSuratKerjas', [ReportController::class, 'printAllSuratKerjas'])->name('printAllSuratKerjas');    
+    Route::get('printAllSuratKerjasById/{id}', [ReportController::class, 'printAllSuratKerjasById'])->name('printAllSuratKerjasById');
+});
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('pelanggarans', PelanggaranContoller::class);

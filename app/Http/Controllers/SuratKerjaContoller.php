@@ -14,7 +14,9 @@ class SuratKerjaContoller extends Controller
      */
     public function index()
     {
-        $suratKerjas = SuratKerja::with('assignBy', 'assignTo')->orderBy('id', 'asc')->paginate(10);
+        $suratKerjas = SuratKerja::with('assignBy', 'assignTo')
+        ->withCount('pelanggaran')
+        ->orderBy('id', 'asc')->paginate(10);
         return view('suratkerja.index', compact('suratKerjas'));
     }
 

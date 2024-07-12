@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Parpol;
 use App\Models\JenisPelanggaran;
+use App\Models\SuratKerja;
 
 class ReportController extends Controller
 {
@@ -74,5 +75,39 @@ class ReportController extends Controller
         $nama_jam = substr(date('d/m/y'),0,2).substr(date('d/m/y'),3,2).substr(date('h:i:s'),6,2);
 
         return $report->stream('Laporan Data Per Jenis Pelanggaran '.$nama_tgl.'_'.$nama_jam.'.pdf');
+    }
+
+    public function printAllSuratKerjas()
+    {
+        $surat = SuratKerja::withCount('pelanggaran')->get();
+        
+        $data = [
+            'surat' => $surat,
+            'tanggal' => date('d F Y'),
+            'judul' => 'Laporan Data Surat Kerja'
+        ];
+
+        $report = PDF::loadView('suratkerja.print', $data)->setPaper('A4', 'potrait');
+        $nama_tgl = substr(date('d/m/y'),0,2).substr(date('d/m/y'),3,2).substr(date('d/m/y'),6,2);
+        $nama_jam = substr(date('d/m/y'),0,2).substr(date('d/m/y'),3,2).substr(date('h:i:s'),6,2);
+
+        return $report->stream('Laporan Data Surat Kerja '.$nama_tgl.'_'.$nama_jam.'.pdf');
+    }
+
+    public function printAllSuratKerjasById($id)
+    {
+        $surat = SuratKerja::withCount('pelanggaran')->where('id', $id)->get();
+        
+        $data = [
+            'surat' => $surat,
+            'tanggal' => date('d F Y'),
+            'judul' => 'Laporan Data Per Surat Kerja'
+        ];
+
+        $report = PDF::loadView('suratkerja.printById', $data)->setPaper('A4', 'potrait');
+        $nama_tgl = substr(date('d/m/y'),0,2).substr(date('d/m/y'),3,2).substr(date('d/m/y'),6,2);
+        $nama_jam = substr(date('d/m/y'),0,2).substr(date('d/m/y'),3,2).substr(date('h:i:s'),6,2);
+
+        return $report->stream('Laporan Data Surat Kerja '.$nama_tgl.'_'.$nama_jam.'.pdf');
     }
 }
