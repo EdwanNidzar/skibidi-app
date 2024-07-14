@@ -61,6 +61,7 @@
               <th class="px-4 py-3">Photo Partai</th>
               <th class="px-4 py-3">Nomor Partai</th>
               <th class="px-4 py-3">Nama Partai</th>
+              <th class="px-4 py-3">Total Pelanggaran</th>
               <th class="px-4 py-3">Action</th>
             </tr>
           </thead>
@@ -77,6 +78,9 @@
                 <td class="px-4 py-3 text-sm">
                   {{ $parpol->parpol_name }}
                 </td>
+                <td class="px-4 py-3 text-sm">
+                  {{ $parpol->pelanggaran_count }}
+                </td>
                 <td class="px-4 py-3 text-sm flex space-x-2">
                   <a href="{{ route('parpols.show', $parpol->id) }}"
                     class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
@@ -88,6 +92,17 @@
                       <path stroke="currentColor" stroke-width="2" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                     </svg>
                   </a>
+
+                  <a href="{{ route('parpols.pelanggarans', $parpol->id) }}"
+                    class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                      xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                      viewBox="0 0 24 24">
+                      <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                        d="m21 21-3.5-3.5M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" />
+                    </svg>
+                  </a>
+
                   <a href="{{ route('parpols.edit', $parpol->id) }}"
                     class="px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-yellow-400 border border-transparent rounded-lg active:bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:shadow-outline-yellow">
                     <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"

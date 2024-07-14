@@ -14,7 +14,7 @@ class ParpolController extends Controller
      */
     public function index()
     {
-        $parpols = Parpol::paginate(5);
+        $parpols = Parpol::withCount('pelanggaran')->paginate(5);
         return view('parpols.index', compact('parpols'));
     }
 
@@ -124,4 +124,13 @@ class ParpolController extends Controller
             return redirect()->route('parpols.index')->with('error', 'Data parpol gagal dihapus');
         }
     }
+
+    public function pelanggaran($id)
+    {
+        $parpol = Parpol::findOrFail($id);
+        $pelanggarans = $parpol->pelanggaran()->paginate(5);
+
+        return view('pelanggarans.index', compact('parpol', 'pelanggarans'));
+    }
+
 }
