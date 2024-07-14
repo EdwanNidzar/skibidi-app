@@ -93,4 +93,12 @@ class JenisPelanggaranContoller extends Controller
             return redirect()->route('jenispelanggarans.index')->with('error', 'Jenis Pelanggaran gagal dihapus');
         }
     }
+
+    public function pelanggaran($id)
+    {
+        $jenis_pelanggaran = JenisPelanggaran::findOrFail($id);
+        $pelanggarans = $jenis_pelanggaran->pelanggaran()->paginate(5);
+
+        return view('pelanggarans.index', compact('jenis_pelanggaran', 'pelanggarans'));
+    }
 }
