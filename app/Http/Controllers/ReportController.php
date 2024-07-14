@@ -7,6 +7,7 @@ use App\Models\Parpol;
 use App\Models\JenisPelanggaran;
 use App\Models\Pelanggaran;
 use App\Models\SuratKerja;
+use App\Models\LaporanPelanggaran;
 
 class ReportController extends Controller
 {
@@ -144,5 +145,41 @@ class ReportController extends Controller
         $nama_jam = date('His');
 
         return $report->stream('Laporan Data Per Pelanggaran '.$nama_tgl.'_'.$nama_jam.'.pdf');
+    }
+
+    public function printAllLaporanPelanggaran()
+    {
+        $laporanPelanggarans = LaporanPelanggaran::with('pelanggaran.jenisPelanggaran', 'pelanggaran.parpol')->get();
+
+        $data = [
+            'laporanPelanggarans' => $laporanPelanggarans,
+            'tanggal' => date('d F Y'),
+            'judul' => 'Laporan Data Laporan Pelanggaran'
+        ];
+
+        $report = PDF::loadView('laporanpelanggaran.print', $data)->setPaper('A4', 'potrait');
+        $nama_tgl = date('dmY');
+        $nama_jam = date('His');
+
+        return $report->stream('Laporan Data Laporan Pelanggaran '.$nama_tgl.'_'.$nama_jam.'.pdf');
+    }
+
+    public function printAllLaporanPelanggaranById($id)
+    {
+        $laporanPelanggarans = LaporanPelanggaran::with(['pelanggaran', 'province', 'regency', 'district', 'village'])
+        ->where('id', $id)
+        ->get();
+
+        $data = [
+            'laporanPelanggarans' => $laporanPelanggarans,
+            'tanggal' => date('d F Y'),
+            'judul' => 'Laporan Data Per Laporan Pelanggaran'
+        ];
+
+        $report = PDF::loadView('laporanpelanggaran.printById', $data)->setPaper('A4', 'potrait');
+        $nama_tgl = date('dmY');
+        $nama_jam = date('His');
+
+        return $report->stream('Laporan Data Per Laporan Pelanggaran '.$nama_tgl.'_'.$nama_jam.'.pdf');
     }
 }

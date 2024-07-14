@@ -70,6 +70,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('laporanpelanggarans/villages/{district_id}', [LaporanPelanggaranController::class, 'getVillages']);
     Route::patch('laporanpelanggarans/{laporanpelanggaran}/verif', [LaporanPelanggaranController::class, 'verify'])->name('laporanpelanggarans.verif');
     Route::patch('laporanpelanggarans/{laporanpelanggaran}/reject', [LaporanPelanggaranController::class, 'reject'])->name('laporanpelanggarans.reject');
+    Route::get('printAllLaporanPelanggaran', [ReportController::class, 'printAllLaporanPelanggaran'])->name('printAllLaporanPelanggaran');    
+    Route::get('printAllLaporanPelanggaranById/{id}', [ReportController::class, 'printAllLaporanPelanggaranById'])->name('printAllLaporanPelanggaranById');
 });
 
 require __DIR__.'/auth.php';
