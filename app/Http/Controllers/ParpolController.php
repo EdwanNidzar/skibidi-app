@@ -124,4 +124,13 @@ class ParpolController extends Controller
             return redirect()->route('parpols.index')->with('error', 'Data parpol gagal dihapus');
         }
     }
+
+    public function pelanggaran($id)
+    {
+        $parpol = Parpol::findOrFail($id);
+        $pelanggarans = $parpol->pelanggaran()->paginate(5);
+
+        return view('pelanggarans.index', compact('parpol', 'pelanggarans'));
+    }
+
 }

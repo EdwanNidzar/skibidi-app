@@ -55,7 +55,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('suratkerjas', SuratKerjaContoller::class);
     Route::get('printAllSuratKerjas', [ReportController::class, 'printAllSuratKerjas'])->name('printAllSuratKerjas');    
     Route::get('printAllSuratKerjasById/{id}', [ReportController::class, 'printAllSuratKerjasById'])->name('printAllSuratKerjasById');
+    Route::get('parpols/{id}/pelanggarans', [ParpolController::class, 'pelanggaran'])->name('parpols.pelanggarans');
 });
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('jenispelanggarans', JenisPelanggaranContoller::class)->middleware(['auth', 'verified']);
+
+
+    Route::get('jenispelanggarans/{id}/pelanggarans', [JenisPelanggaranContoller ::class, 'pelanggaran'])->name('jenispelanggarans.pelanggarans');
+});
+
+Route::resource('suratkerjas', SuratKerjaContoller::class)->middleware(['auth', 'verified']);
+
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('pelanggarans', PelanggaranContoller::class);
