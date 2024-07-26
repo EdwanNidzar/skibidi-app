@@ -19,8 +19,8 @@ return new class extends Migration
             $table->char('regency_id', 4);
             $table->char('district_id', 7);
             $table->char('village_id', 10);
-            $table->float('latitude');
-            $table->float('longitude');
+            $table->string('latitude');
+            $table->string('longitude');
             $table->unsignedBigInteger('assign_by');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->text('note')->nullable();

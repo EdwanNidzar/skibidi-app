@@ -138,7 +138,7 @@
                     <div>
                       <a href="{{ route('laporanpelanggarans.edit', $laporan->id) }}"
                         class="flex items-center px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-yellow-400 border border-transparent rounded-lg active:bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:shadow-outline-blue"
-                        x-show="('{{ auth()->user()->hasRole('panwaslu-kecamatan') }}' && '{{ $laporan->status }}' === 'pending')">
+                        x-show="('{{ auth()->user()->hasRole('panwaslu-kecamatan') }}' && '{{ $laporan->status }}' === 'pending' || '{{ $laporan->status }}' === 'rejected')">
                         <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
                           xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                           viewBox="0 0 24 24">

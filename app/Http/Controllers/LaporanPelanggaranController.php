@@ -173,7 +173,7 @@ class LaporanPelanggaranController extends Controller
             $laporan->latitude = $request->latitude;
             $laporan->longitude = $request->longitude;
             $laporan->status = 'pending';
-            $laporan->user_id = Auth::user()->id;
+            $laporan->assign_by = Auth::user()->id;
 
             if ($laporan->save()) {
                 return redirect()->route('laporanpelanggarans.index')->with('success', 'Laporan berhasil diperbarui');

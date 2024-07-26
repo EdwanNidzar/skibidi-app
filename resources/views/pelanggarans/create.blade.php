@@ -127,8 +127,8 @@
             <input type="hidden" name="surat_kerja_id" value="{{ $suratKerja->id }}">
           @endif
           @error('surat_kerja_id')
-          <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-        @enderror
+            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+          @enderror
           {{-- end handle suratKerja --}}
 
           {{-- btn action --}}
@@ -197,12 +197,252 @@
           }
         ],
         'DPRD Kabupaten/Kota': [{
-          value: '',
-          label: 'PILIH DPRD Kabupaten/Kota'
-        }, {
-          value: '',
-          label: 'Example Dapil 2'
-        }],
+            value: '',
+            label: 'PILIH DPRD Kabupaten/Kota'
+          },
+          {
+            value: '',
+            label: '--Kabupaten Kotabaru--'
+          },
+          {
+            value: 'Tanah Laut 1',
+            label: 'Tanah Laut 1'
+          },
+          {
+            value: 'Tanah Laut 2',
+            label: 'Tanah Laut 2'
+          },
+          {
+            value: 'Tanah Laut 3',
+            label: 'Tanah Laut 3'
+          },
+          {
+            value: 'Tanah Laut 4',
+            label: 'Tanah Laut 4'
+          },
+          {
+            value: '',
+            label: '--Kabupaten Kotabaru--'
+          },
+          {
+            value: 'Kotabaru 1',
+            label: 'Kotabaru 1'
+          },
+          {
+            value: 'Kotabaru 2',
+            label: 'Kotabaru 2'
+          },
+          {
+            value: 'Kotabaru 3',
+            label: 'Kotabaru 3'
+          },
+          {
+            value: 'Kotabaru 4',
+            label: 'Kotabaru 4'
+          },
+          {
+            value: '',
+            label: '--Kabupaten Banjar--'
+          },
+          {
+            value: 'Banjar 1',
+            label: 'Banjar 1'
+          },
+          {
+            value: 'Banjar 2',
+            label: 'Banjar 2'
+          },
+          {
+            value: 'Banjar 3',
+            label: 'Banjar 3'
+          },
+          {
+            value: 'Banjar 4',
+            label: 'Banjar 4'
+          },
+          {
+            value: 'Banjar 5',
+            label: 'Banjar 5'
+          },
+          {
+            value: '',
+            label: '--Kabupaten Tapin--'
+          },
+          {
+            value: 'Tapin 1',
+            label: 'Tapin 1'
+          },
+          {
+            value: 'Tapin 2',
+            label: 'Tapin 2'
+          },
+          {
+            value: 'Tapin 3',
+            label: 'Tapin 3'
+          },
+          {
+            value: '',
+            label: '--Kabupaten HSS--'
+          },
+          {
+            value: 'HSS 1',
+            label: 'HSS 1'
+          },
+          {
+            value: 'HSS 2',
+            label: 'HSS 2'
+          },
+          {
+            value: 'HSS 3',
+            label: 'HSS 3'
+          },
+          {
+            value: '',
+            label: '--Kabupaten HST--'
+          },
+          {
+            value: 'HST 1',
+            label: 'HST 1'
+          },
+          {
+            value: 'HST 2',
+            label: 'HST 2'
+          },
+          {
+            value: 'HST 3',
+            label: 'HST 3'
+          },
+          {
+            value: 'HST 4',
+            label: 'HST 4'
+          },
+          {
+            value: 'HST 5',
+            label: 'HST 5'
+          },
+          {
+            value: '',
+            label: '--Kabupaten HSU--'
+          },
+          {
+            value: 'HSU 1',
+            label: 'HSU 1'
+          },
+          {
+            value: 'HSU 2',
+            label: 'HSU 2'
+          },
+          {
+            value: 'HSU 3',
+            label: 'HSU 3'
+          },
+          {
+            value: 'HSU 4',
+            label: 'HSU 4'
+          },
+          {
+            value: '',
+            label: '--Kabupaten Tabalong--'
+          },
+          {
+            value: 'Tabalong 1',
+            label: 'Tabalong 1'
+          },
+          {
+            value: 'Tabalong 2',
+            label: 'Tabalong 2'
+          },
+          {
+            value: 'Tabalong 3',
+            label: 'Tabalong 3'
+          },
+          {
+            value: 'Tabalong 4',
+            label: 'Tabalong 4'
+          },
+          {
+            value: '',
+            label: '--Kabupaten Tanah Bumbu--'
+          },
+          {
+            value: 'Tanah Bumbu 1',
+            label: 'Tanah Bumbu 1'
+          },
+          {
+            value: 'Tanah Bumbu 2',
+            label: 'Tanah Bumbu 2'
+          },
+          {
+            value: 'Tanah Bumbu 3',
+            label: 'Tanah Bumbu 3'
+          },
+          {
+            value: 'Tanah Bumbu 4',
+            label: 'Tanah Bumbu 4'
+          },
+          {
+            value: '',
+            label: '--Kabupaten Balangan--'
+          },
+          {
+            value: 'Balangan 1',
+            label: 'Balangan 1'
+          },
+          {
+            value: 'Balangan 2',
+            label: 'Balangan 2'
+          },
+          {
+            value: 'Balangan 3',
+            label: 'Balangan 3'
+          },
+          {
+            value: '',
+            label: '--Kota Banjarmasin--'
+          },
+          {
+            value: 'Banjarmasin 1',
+            label: 'Banjarmasin 1'
+          },
+          {
+            value: 'Banjarmasin 2',
+            label: 'Banjarmasin 2'
+          },
+          {
+            value: 'Banjarmasin 3',
+            label: 'Banjarmasin 3'
+          },
+          {
+            value: 'Banjarmasin 4',
+            label: 'Banjarmasin 4'
+          },
+          {
+            value: 'Banjarmasin 5',
+            label: 'Banjarmasin 5'
+          },
+          {
+            value: '',
+            label: '--Kota Banjarbaru--'
+          },
+          {
+            value: 'Banjarbaru 1',
+            label: 'Banjarbaru 1'
+          },
+          {
+            value: 'Banjarbaru 2',
+            label: 'Banjarbaru 2'
+          },
+          {
+            value: 'Banjarbaru 3',
+            label: 'Banjarbaru 3'
+          },
+          {
+            value: 'Banjarbaru 4',
+            label: 'Banjarbaru 4'
+          },
+
+          
+        ],
         'DPD RI': [{
             value: 'Kalimantan Selatan',
             label: 'Kalimantan Selatan'

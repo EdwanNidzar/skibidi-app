@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ParpolController;
@@ -25,9 +26,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
 
 Route::middleware('auth')->group(function () {
     Route::view('about', 'about')->name('about');
@@ -53,7 +54,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('suratkerjas', SuratKerjaContoller::class);
-    Route::get('printAllSuratKerjas', [ReportController::class, 'printAllSuratKerjas'])->name('printAllSuratKerjas');    
+    Route::get('printAllSuratKerjas', [ReportController::class, 'printAllSuratKerjas'])->name('printAllSuratKerjas');
     Route::get('printAllSuratKerjasById/{id}', [ReportController::class, 'printAllSuratKerjasById'])->name('printAllSuratKerjasById');
     Route::get('parpols/{id}/pelanggarans', [ParpolController::class, 'pelanggaran'])->name('parpols.pelanggarans');
 });
@@ -62,7 +63,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('jenispelanggarans', JenisPelanggaranContoller::class)->middleware(['auth', 'verified']);
     Route::get('printAllJenisPelanggarans', [ReportController::class, 'printAllJenisPelanggarans'])->name('printAllJenisPelanggarans');
     Route::get('printAllJenisPelanggaransById/{id}', [ReportController::class, 'printAllJenisPelanggaransById'])->name('printAllJenisPelanggaransById');
-    Route::get('jenispelanggarans/{id}/pelanggarans', [JenisPelanggaranContoller ::class, 'pelanggaran'])->name('jenispelanggarans.pelanggarans');
+    Route::get('jenispelanggarans/{id}/pelanggarans', [JenisPelanggaranContoller::class, 'pelanggaran'])->name('jenispelanggarans.pelanggarans');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -73,7 +74,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('pelanggarans', PelanggaranContoller::class);
-    Route::get('printAllPelanggarans', [ReportController::class, 'printAllPelanggarans'])->name('printAllPelanggarans');    
+    Route::get('printAllPelanggarans', [ReportController::class, 'printAllPelanggarans'])->name('printAllPelanggarans');
     Route::get('printAllPelanggaransById/{id}', [ReportController::class, 'printAllPelanggaransById'])->name('printAllPelanggaransById');
 });
 
@@ -84,8 +85,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('laporanpelanggarans/villages/{district_id}', [LaporanPelanggaranController::class, 'getVillages']);
     Route::patch('laporanpelanggarans/{laporanpelanggaran}/verif', [LaporanPelanggaranController::class, 'verify'])->name('laporanpelanggarans.verif');
     Route::patch('laporanpelanggarans/{laporanpelanggaran}/reject', [LaporanPelanggaranController::class, 'reject'])->name('laporanpelanggarans.reject');
-    Route::get('printAllLaporanPelanggaran', [ReportController::class, 'printAllLaporanPelanggaran'])->name('printAllLaporanPelanggaran');    
+    Route::get('printAllLaporanPelanggaran', [ReportController::class, 'printAllLaporanPelanggaran'])->name('printAllLaporanPelanggaran');
     Route::get('printAllLaporanPelanggaranById/{id}', [ReportController::class, 'printAllLaporanPelanggaranById'])->name('printAllLaporanPelanggaranById');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
