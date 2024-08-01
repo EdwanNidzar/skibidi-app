@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\LaporanPelanggaran;
 use App\Models\Pelanggaran;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -81,5 +81,10 @@ class DashboardController extends Controller
             ->get();
 
         return view('dashboard', compact('parpolLabels', 'parpolValues', 'jenisPelanggaranLabels', 'jenisPelanggaranValues', 'locations', 'statusLabels', 'dapilLabels', 'chartData'));
+    }
+
+    public function markAsRead(){
+        Auth::user()->unreadNotifications->markAsRead();
+        return redirect()->back();
     }
 }

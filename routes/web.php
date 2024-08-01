@@ -26,11 +26,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:bawaslu-provinsi|bawaslu-kabupaten-kota|panwaslu-kecamatan'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/markAsRead', [DashboardController::class, 'markAsRead'])->name('markAsRead');
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified', 'role:bawaslu-provinsi|bawaslu-kabupaten-kota|panwaslu-kecamatan'])->group(function () {
     Route::view('about', 'about')->name('about');
 
     Route::get('users', [UserController::class, 'index'])->name('users.index');
@@ -40,46 +41,33 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:bawaslu-provinsi'])->group(function () {
     Route::resource('parpols', ParpolController::class);
     Route::get('printAllParpols', [ReportController::class, 'printAllParpols'])->name('printAllParpols');
     Route::get('printAllParpolsById/{id}', [ReportController::class, 'printAllParpolsById'])->name('printAllParpolsById');
-});
-
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::resource('jenispelanggarans', JenisPelanggaranContoller::class);
-    Route::get('printAllJenisPelanggarans', [ReportController::class, 'printAllJenisPelanggarans'])->name('printAllJenisPelanggarans');
-    Route::get('printAllJenisPelanggaransById/{id}', [ReportController::class, 'printAllJenisPelanggaransById'])->name('printAllJenisPelanggaransById');
-});
-
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::resource('suratkerjas', SuratKerjaContoller::class);
-    Route::get('printAllSuratKerjas', [ReportController::class, 'printAllSuratKerjas'])->name('printAllSuratKerjas');
-    Route::get('printAllSuratKerjasById/{id}', [ReportController::class, 'printAllSuratKerjasById'])->name('printAllSuratKerjasById');
     Route::get('parpols/{id}/pelanggarans', [ParpolController::class, 'pelanggaran'])->name('parpols.pelanggarans');
-    Route::get('/markAsRead', [SuratKerjaContoller::class, 'markAsRead'])->name('markAsRead');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::resource('jenispelanggarans', JenisPelanggaranContoller::class)->middleware(['auth', 'verified']);
+Route::middleware(['auth', 'verified', 'role:bawaslu-provinsi'])->group(function () {
+    Route::resource('jenispelanggarans', JenisPelanggaranContoller::class);
     Route::get('printAllJenisPelanggarans', [ReportController::class, 'printAllJenisPelanggarans'])->name('printAllJenisPelanggarans');
     Route::get('printAllJenisPelanggaransById/{id}', [ReportController::class, 'printAllJenisPelanggaransById'])->name('printAllJenisPelanggaransById');
     Route::get('jenispelanggarans/{id}/pelanggarans', [JenisPelanggaranContoller::class, 'pelanggaran'])->name('jenispelanggarans.pelanggarans');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:bawaslu-provinsi|bawaslu-kabupaten-kota|panwaslu-kecamatan'])->group(function () {
     Route::resource('suratkerjas', SuratKerjaContoller::class);
     Route::get('printAllSuratKerjas', [ReportController::class, 'printAllSuratKerjas'])->name('printAllSuratKerjas');
     Route::get('printAllSuratKerjasById/{id}', [ReportController::class, 'printAllSuratKerjasById'])->name('printAllSuratKerjasById');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:bawaslu-provinsi|bawaslu-kabupaten-kota|panwaslu-kecamatan'])->group(function () {
     Route::resource('pelanggarans', PelanggaranContoller::class);
     Route::get('printAllPelanggarans', [ReportController::class, 'printAllPelanggarans'])->name('printAllPelanggarans');
     Route::get('printAllPelanggaransById/{id}', [ReportController::class, 'printAllPelanggaransById'])->name('printAllPelanggaransById');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:bawaslu-provinsi|bawaslu-kabupaten-kota|panwaslu-kecamatan'])->group(function () {
     Route::resource('laporanpelanggarans', LaporanPelanggaranController::class);
     Route::get('laporanpelanggarans/regency/{province_id}', [LaporanPelanggaranController::class, 'getRegency']);
     Route::get('laporanpelanggarans/districts/{regency_id}', [LaporanPelanggaranController::class, 'getDistricts']);

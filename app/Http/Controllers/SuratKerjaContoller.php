@@ -16,10 +16,17 @@ class SuratKerjaContoller extends Controller
      */
     public function index()
     {
-        $suratKerjas = SuratKerja::with('assignBy', 'assignTo')
-        ->withCount('pelanggaran')
-        ->orderBy('id', 'asc')->paginate(10);
-        return view('suratkerja.index', compact('suratKerjas'));
+        if (Auth::user()->hasRole('bawaslu-provinsi') || Auth::user()->hasRole('bawaslu-kabupaten-kota')) {
+            $suratKerjas = SuratKerja::with('assignBy', 'assignTo')->withCount('pelanggaran')->orderBy('id', 'asc')->paginate(10);
+            return view('suratkerja.index', compact('suratKerjas'));
+        } else {
+            $suratKerjas = SuratKerja::with('assignBy', 'assignTo')
+                ->withCount('pelanggaran')
+                ->where('assign_to', Auth::user()->id)
+                ->orderBy('id', 'asc')
+                ->paginate(10);
+            return view('suratkerja.index', compact('suratKerjas'));
+        }
     }
 
     /**
@@ -137,10 +144,5 @@ class SuratKerjaContoller extends Controller
                 ->route('suratkerjas.index')
                 ->with('error', 'Surat Kerja gagal dihapus: ' . $e->getMessage());
         }
-    }
-
-    public function markAsRead(){
-        Auth::user()->unreadNotifications->markAsRead();
-        return redirect()->back();
     }
 }
