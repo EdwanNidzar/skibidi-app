@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
 
         $kota = User::create([
             'name' => 'Bawaslu Kota/Kabupaten',
-            'email' => 'kota@gmail.com',
+            'email' => 'nidzaredwan@gmail.com',
             'password' => bcrypt('kota1234'),
         ]);
         $kota->assignRole('bawaslu-kabupaten-kota');

@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\SuratKerja;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Notifications\SuratKerjaAssigned;
 
 class SuratKerjaContoller extends Controller
 {
@@ -40,6 +42,8 @@ class SuratKerjaContoller extends Controller
             'assign_to_id' => 'required',
         ]);
 
+        DB::beginTransaction();
+
         try {
             $surat = new SuratKerja();
             $surat->nomor_surat_kerja = $request->nomorSuratKerja;
@@ -47,11 +51,22 @@ class SuratKerjaContoller extends Controller
             $surat->assign_to = $request->assign_to_id;
 
             if ($surat->save()) {
+                // Kirim notifikasi ke pengguna yang ditugaskan
+                $userAssigned = User::find($request->assign_to_id);
+                $userAssigned->notify(new SuratKerjaAssigned($surat));
+
+                // Commit transaksi
+                DB::commit();
+
                 return redirect()->route('suratkerjas.index')->with('success', 'Surat Kerja berhasil dibuat');
             } else {
+                // Rollback jika penyimpanan gagal
+                DB::rollBack();
                 return redirect()->route('suratkerjas.index')->with('error', 'Surat Kerja gagal dibuat');
             }
         } catch (\Exception $e) {
+            // Rollback jika terjadi kesalahan
+            DB::rollBack();
             return redirect()
                 ->route('suratkerjas.index')
                 ->with('error', 'Surat Kerja gagal dibuat: ' . $e->getMessage());
@@ -122,5 +137,10 @@ class SuratKerjaContoller extends Controller
                 ->route('suratkerjas.index')
                 ->with('error', 'Surat Kerja gagal dihapus: ' . $e->getMessage());
         }
+    }
+
+    public function markAsRead(){
+        Auth::user()->unreadNotifications->markAsRead();
+        return redirect()->back();
     }
 }

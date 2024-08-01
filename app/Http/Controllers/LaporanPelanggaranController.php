@@ -10,6 +10,12 @@ use App\Models\District;
 use App\Models\Village;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use App\Notifications\LaporanPelanggaranCreated;
+use App\Notifications\LaporanPelanggaranUpdated;
+use App\Notifications\LaporanPelanggaranVerified;
+use App\Notifications\LaporanPelanggaranRejected;
 
 class LaporanPelanggaranController extends Controller
 {
@@ -81,11 +87,10 @@ class LaporanPelanggaranController extends Controller
             'longitude' => 'required',
         ]);
 
-        try {
-            // Create a new instance of LaporanPelanggaran
-            $laporan = new LaporanPelanggaran();
+        DB::beginTransaction();
 
-            // Assign validated data to the model
+        try {
+            $laporan = new LaporanPelanggaran();
             $laporan->pelanggaran_id = $request->pelanggaran_id;
             $laporan->address = $request->alamat;
             $laporan->province_id = $request->provinsi_id;
@@ -97,11 +102,25 @@ class LaporanPelanggaranController extends Controller
             $laporan->assign_by = Auth::user()->id;
 
             if ($laporan->save()) {
+                // Temukan semua pengguna dengan peran 'bawaslu-kabupaten-kota'
+                $users = User::whereHas('roles', function ($query) {
+                    $query->where('name', 'bawaslu-kabupaten-kota');
+                })->get();
+
+                // Kirim notifikasi ke setiap pengguna
+                foreach ($users as $user) {
+                    $user->notify(new LaporanPelanggaranCreated($laporan));
+                }
+
+                DB::commit();
+
                 return redirect()->route('laporanpelanggarans.index')->with('success', 'Laporan berhasil disimpan');
             } else {
+                DB::rollBack();
                 return redirect()->route('laporanpelanggarans.index')->with('error', 'Laporan gagal disimpan');
             }
         } catch (\Exception $e) {
+            DB::rollBack();
             return redirect()
                 ->route('laporanpelanggarans.index')
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -159,6 +178,8 @@ class LaporanPelanggaranController extends Controller
             'longitude' => 'required',
         ]);
 
+        DB::beginTransaction();
+
         try {
             // Create a new instance of LaporanPelanggaran
             $laporan = LaporanPelanggaran::find($id);
@@ -176,11 +197,25 @@ class LaporanPelanggaranController extends Controller
             $laporan->assign_by = Auth::user()->id;
 
             if ($laporan->save()) {
+                // Find all users with the role 'bawaslu-kabupaten-kota'
+                $users = User::whereHas('roles', function ($query) {
+                    $query->where('name', 'bawaslu-kabupaten-kota');
+                })->get();
+
+                // Notify each user
+                foreach ($users as $user) {
+                    $user->notify(new LaporanPelanggaranUpdated($laporan));
+                }
+
+                DB::commit();
+
                 return redirect()->route('laporanpelanggarans.index')->with('success', 'Laporan berhasil diperbarui');
             } else {
+                DB::rollBack();
                 return redirect()->route('laporanpelanggarans.index')->with('error', 'Laporan gagal diperbarui');
             }
         } catch (\Exception $e) {
+            DB::rollBack();
             return redirect()
                 ->route('laporanpelanggarans.index')
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
@@ -206,15 +241,37 @@ class LaporanPelanggaranController extends Controller
      */
     public function verify(string $id)
     {
-        $verif = LaporanPelanggaran::findOrFail($id);
-        $verif->status = 'approved';
-        $verif->save();
-        $verif->verif_by = Auth::user()->id;
+        DB::beginTransaction();
 
-        if ($verif->save()) {
-            return redirect()->route('laporanpelanggarans.index')->with('success', 'Laporan berhasil diverifikasi');
-        } else {
-            return redirect()->route('laporanpelanggarans.index')->with('error', 'Laporan gagal diverifikasi');
+        try {
+            // Find the report by ID
+            $verif = LaporanPelanggaran::findOrFail($id);
+
+            // Update the status and verifier
+            $verif->status = 'approved';
+            $verif->verif_by = Auth::user()->id;
+
+            if ($verif->save()) {
+                // Notify the user who assigned the report
+                $user = $verif->assignedBy;
+                if ($user) {
+                    $user->notify(new LaporanPelanggaranVerified($verif));
+                }
+
+                // Commit the transaction if all operations were successful
+                DB::commit();
+                return redirect()->route('laporanpelanggarans.index')->with('success', 'Laporan berhasil diverifikasi');
+            } else {
+                // Rollback if saving the report failed
+                DB::rollBack();
+                return redirect()->route('laporanpelanggarans.index')->with('error', 'Laporan gagal diverifikasi');
+            }
+        } catch (\Exception $e) {
+            // Rollback if an exception occurs
+            DB::rollBack();
+            return redirect()
+                ->route('laporanpelanggarans.index')
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
@@ -223,16 +280,38 @@ class LaporanPelanggaranController extends Controller
      */
     public function reject(Request $request, string $id)
     {
-        $verif = LaporanPelanggaran::findOrFail($id);
-        $verif->status = 'rejected';
-        $verif->save();
-        $verif->note = $request->note;
-        $verif->verif_by = Auth::user()->id;
+        DB::beginTransaction();
 
-        if ($verif->save()) {
-            return redirect()->route('laporanpelanggarans.index')->with('success', 'Laporan berhasil direject');
-        } else {
-            return redirect()->route('laporanpelanggarans.index')->with('error', 'Laporan gagal direject');
+        try {
+            // Find the report by ID
+            $verif = LaporanPelanggaran::findOrFail($id);
+
+            // Update the status, note, and verifier
+            $verif->status = 'rejected';
+            $verif->note = $request->note;
+            $verif->verif_by = Auth::user()->id;
+
+            if ($verif->save()) {
+                // Notify the user who assigned the report
+                $user = $verif->assignedBy;
+                if ($user) {
+                    $user->notify(new LaporanPelanggaranRejected($verif));
+                }
+
+                // Commit the transaction if all operations were successful
+                DB::commit();
+                return redirect()->route('laporanpelanggarans.index')->with('success', 'Laporan berhasil direject');
+            } else {
+                // Rollback if saving the report failed
+                DB::rollBack();
+                return redirect()->route('laporanpelanggarans.index')->with('error', 'Laporan gagal direject');
+            }
+        } catch (\Exception $e) {
+            // Rollback if an exception occurs
+            DB::rollBack();
+            return redirect()
+                ->route('laporanpelanggarans.index')
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 }

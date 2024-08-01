@@ -57,6 +57,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('printAllSuratKerjas', [ReportController::class, 'printAllSuratKerjas'])->name('printAllSuratKerjas');
     Route::get('printAllSuratKerjasById/{id}', [ReportController::class, 'printAllSuratKerjasById'])->name('printAllSuratKerjasById');
     Route::get('parpols/{id}/pelanggarans', [ParpolController::class, 'pelanggaran'])->name('parpols.pelanggarans');
+    Route::get('/markAsRead', [SuratKerjaContoller::class, 'markAsRead'])->name('markAsRead');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
