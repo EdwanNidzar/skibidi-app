@@ -22,9 +22,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [DashboardController::class, 'welcome'])->name('dashboard');
 
 Route::middleware(['auth', 'verified', 'role:bawaslu-provinsi|bawaslu-kabupaten-kota|panwaslu-kecamatan'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
