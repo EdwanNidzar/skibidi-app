@@ -15,7 +15,8 @@
               class="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <option value="disable">Pilih Partai</option>
               @foreach ($parpol as $party)
-                <option value="{{ $party->id }}">{{ $party->parpol_name }}</option>
+                <option value="{{ $party->id }}" {{ old('parpol_id') == $party->id ? 'selected' : '' }}>
+                  {{ $party->parpol_name }}</option>
               @endforeach
             </select>
             @error('parpol_id')
@@ -31,7 +32,8 @@
               class="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <option value="disable">Pilih Jenis Pelanggaran</option>
               @foreach ($jenispelanggaran as $jp)
-                <option value="{{ $jp->id }}">{{ $jp->jenis_pelanggaran }}</option>
+                <option value="{{ $jp->id }}" {{ old('jenis_pelanggaran_id') == $jp->id ? 'selected' : '' }}>
+                  {{ $jp->jenis_pelanggaran }}</option>
               @endforeach
             </select>
             @error('jenis_pelanggaran_id')
@@ -47,10 +49,13 @@
             <select id="status_peserta_pemilu" name="status_peserta_pemilu"
               class="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <option value="disable">Pilih Status Peserta Pemilu</option>
-              <option value="DPR RI">DPR RI</option>
-              <option value="DPRD Provinsi">DPRD Provinsi</option>
-              <option value="DPRD Kabupaten/Kota">DPRD Kabupaten/Kota</option>
-              <option value="DPD RI">DPD RI</option>
+              <option value="DPR RI" {{ old('status_peserta_pemilu') == 'DPR RI' ? 'selected' : '' }}>DPR RI</option>
+              <option value="DPRD Provinsi" {{ old('status_peserta_pemilu') == 'DPRD Provinsi' ? 'selected' : '' }}>
+                DPRD Provinsi</option>
+              <option value="DPRD Kabupaten/Kota"
+                {{ old('status_peserta_pemilu') == 'DPRD Kabupaten/Kota' ? 'selected' : '' }}>DPRD Kabupaten/Kota
+              </option>
+              <option value="DPD RI" {{ old('status_peserta_pemilu') == 'DPD RI' ? 'selected' : '' }}>DPD RI</option>
             </select>
             @error('status_peserta_pemilu')
               <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -63,7 +68,7 @@
             <label for="nama_bacaleg" class="block text-sm font-medium text-gray-700">Nama Bacaleg</label>
             <input type="text" name="nama_bacaleg" id="nama_bacaleg"
               class="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              placeholder="Nama Bacaleg">
+              placeholder="Nama Bacaleg" value="{{ old('nama_bacaleg') }}">
             @error('nama_bacaleg')
               <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
             @enderror
@@ -76,11 +81,10 @@
             <select id="dapil" name="dapil"
               class="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
               <option value="disable" disabled selected>Pilih Dapil</option>
-              @error('dapil')
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-              @enderror
             </select>
-
+            @error('dapil')
+              <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+            @enderror
           </div>
           {{-- end dapil --}}
 
@@ -88,7 +92,8 @@
           <div>
             <label for="tanggal_input" class="block text-sm font-medium text-gray-700">Tanggal Input</label>
             <input type="date" name="tanggal_input" id="tanggal_input"
-              class="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+              class="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              value="{{ old('tanggal_input') }}">
           </div>
           {{-- end input field for tanggal_input --}}
         </div>
@@ -98,7 +103,7 @@
           <label for="keterangan" class="block text-sm font-medium text-gray-700">Keterangan</label>
           <textarea id="keterangan" name="keterangan" rows="3"
             class="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            placeholder="Keterangan"></textarea>
+            placeholder="Keterangan">{{ old('keterangan') }}</textarea>
           @error('keterangan')
             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
           @enderror
@@ -143,8 +148,6 @@
             </a>
           </div>
           {{-- end btn action --}}
-        </div>
-      </div>
     </form>
   </div>
 
@@ -441,7 +444,7 @@
             label: 'Banjarbaru 4'
           },
 
-          
+
         ],
         'DPD RI': [{
             value: 'Kalimantan Selatan',

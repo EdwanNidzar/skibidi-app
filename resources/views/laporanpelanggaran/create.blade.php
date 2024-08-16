@@ -7,6 +7,8 @@
     <!-- Include Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <!-- Include Leaflet Geocoder CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
     <form action="{{ route('laporanpelanggarans.store') }}" method="POST">
       @csrf
@@ -88,7 +90,7 @@
           @enderror
         </div>
 
-        {{-- Hidden fields for latitude and longitude --}}
+        <!-- Hidden fields for latitude and longitude -->
         <input type="hidden" id="latitude" name="latitude">
         <input type="hidden" id="longitude" name="longitude">
         @error('latitude')
@@ -98,7 +100,7 @@
           <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
         @enderror
 
-        {{-- maps --}}
+        <!-- Leaflet Map -->
         <div class="mt-6">
           <div id="map" style="height: 400px;"></div>
         </div>
@@ -116,9 +118,12 @@
       </div>
     </form>
   </div>
+
   <!-- Include Leaflet JavaScript -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- Include Leaflet Geocoder JavaScript -->
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
   <!-- Initialize Leaflet Map -->
   <script>
@@ -135,6 +140,7 @@
       document.getElementById('longitude').value = lng;
     }
 
+    // Handle map click to add a marker
     map.on('click', function(e) {
       if (marker) {
         map.removeLayer(marker);
@@ -142,6 +148,19 @@
       marker = L.marker(e.latlng).addTo(map);
       updateLatLng(e.latlng.lat, e.latlng.lng);
     });
+
+    // Add geocoding control to the map
+    var geocoder = L.Control.geocoder({
+      defaultMarkGeocode: false
+    }).on('markgeocode', function(e) {
+      var latlng = e.geocode.center;
+      if (marker) {
+        map.removeLayer(marker);
+      }
+      marker = L.marker(latlng).addTo(map);
+      updateLatLng(latlng.lat, latlng.lng);
+      map.setView(latlng, 13);
+    }).addTo(map);
   </script>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

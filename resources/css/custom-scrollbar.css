@@ -1,0 +1,23 @@
+/* custom-scrollbar.css */
+
+/* Style untuk browser berbasis WebKit seperti Chrome, Safari */
+::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+}
+
+::-webkit-scrollbar-track {
+    /* background: #f1f1f1;
+    border-radius: 10px; */
+}
+
+::-webkit-scrollbar-thumb {
+    /* background: #888;
+    border-radius: 10px;
+    transition: background-color 0.3s, height 0.3s; */
+    /* Tambahkan transisi */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}

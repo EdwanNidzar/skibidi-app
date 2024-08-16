@@ -8,6 +8,7 @@ use App\Models\JenisPelanggaran;
 use App\Models\Pelanggaran;
 use App\Models\SuratKerja;
 use App\Models\LaporanPelanggaran;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -30,17 +31,36 @@ class ReportController extends Controller
 
     public function printAllParpolsById($id)
     {
-        $parpol = Parpol::withCount('pelanggaran')->where('id', $id)->get();
+        $parpol = Parpol::withCount('pelanggaran')->where('id', $id)->first();
+        
+        $pelanggaran = DB::select(
+            'SELECT 
+                pelanggarans.nama_bacaleg,
+                jenis_pelanggarans.jenis_pelanggaran AS "jenis_pelanggaran",
+                parpols.parpol_name AS "parpol_name"
+            FROM 
+                pelanggarans
+            JOIN 
+                jenis_pelanggarans ON pelanggarans.jenis_pelanggaran_id = jenis_pelanggarans.id
+            JOIN 
+                parpols ON pelanggarans.parpol_id = parpols.id
+            WHERE 
+                pelanggarans.parpol_id = :id',
+            ['id' => $id]
+        );
         
         $data = [
             'parpol' => $parpol,
+            'pelanggaran' => $pelanggaran,
             'tanggal' => date('d F Y'),
             'judul' => 'Laporan Data Per Partai Politik'
         ];
 
-        $report = PDF::loadView('parpols.printById', $data)->setPaper('A4', 'potrait');
-        $nama_tgl = substr(date('d/m/y'),0,2).substr(date('d/m/y'),3,2).substr(date('d/m/y'),6,2);
-        $nama_jam = substr(date('d/m/y'),0,2).substr(date('d/m/y'),3,2).substr(date('h:i:s'),6,2);
+        // $report = PDF::loadView('parpols.printById', $data)->setPaper('A4', 'potrait');
+        $report = PDF::loadView('parpols.coba', $data)->setPaper('A4', 'potrait');
+
+        $nama_tgl = date('dmY');
+        $nama_jam = date('His');
 
         return $report->stream('Laporan Data Per Partai Politik '.$nama_tgl.'_'.$nama_jam.'.pdf');        
     }
@@ -98,15 +118,33 @@ class ReportController extends Controller
 
     public function printAllSuratKerjasById($id)
     {
-        $surat = SuratKerja::withCount('pelanggaran')->where('id', $id)->get();
+        $surat = SuratKerja::with('assignTo')->withCount('pelanggaran')->where('id', $id)->first();
+
+        $pelanggaran = DB::select(
+            'SELECT 
+                pelanggarans.nama_bacaleg,
+                jenis_pelanggarans.jenis_pelanggaran,
+                parpols.parpol_name,
+                pelanggarans.status_peserta_pemilu
+            FROM 
+                pelanggarans
+            JOIN 
+                jenis_pelanggarans ON pelanggarans.jenis_pelanggaran_id = jenis_pelanggarans.id
+            JOIN 
+                parpols ON pelanggarans.parpol_id = parpols.id
+            WHERE 
+                pelanggarans.surat_kerja_id = :id',
+            ['id' => $id]
+        );
         
         $data = [
             'surat' => $surat,
+            'pelanggaran' => $pelanggaran,
             'tanggal' => date('d F Y'),
             'judul' => 'Laporan Data Per Surat Kerja'
         ];
 
-        $report = PDF::loadView('suratkerja.printById', $data)->setPaper('A4', 'potrait');
+        $report = PDF::loadView('suratkerja.coba', $data)->setPaper('A4', 'potrait');
         $nama_tgl = substr(date('d/m/y'),0,2).substr(date('d/m/y'),3,2).substr(date('d/m/y'),6,2);
         $nama_jam = substr(date('d/m/y'),0,2).substr(date('d/m/y'),3,2).substr(date('h:i:s'),6,2);
 
@@ -133,14 +171,22 @@ class ReportController extends Controller
     public function printAllPelanggaransById($id)
     {
         $pelanggaran = Pelanggaran::with(['parpol', 'jenisPelanggaran', 'pelanggaranImages', 'suratKerja'])->where('id', $id)->get();
-       
+        $pelapor = DB::select('SELECT surat_kerjas.nomor_surat_kerja, users.name
+            FROM pelanggarans
+            JOIN surat_kerjas ON pelanggarans.surat_kerja_id = surat_kerjas.id
+            JOIN users ON pelanggarans.pelapor_id = users.id
+            WHERE pelanggarans.id = :id', ['id' => $id]); 
+            
+        $pelapor = !empty($pelapor) ? $pelapor[0] : null;
+
         $data = [
             'pelanggaran' => $pelanggaran,
+            'pelapor' => $pelapor,
             'tanggal' => date('d F Y'),
             'judul' => 'Laporan Data Per Pelanggaran'
         ];
 
-        $report = PDF::loadView('pelanggarans.printById', $data)->setPaper('A4', 'landscape');
+        $report = PDF::loadView('pelanggarans.printById', $data)->setPaper('A4', 'potrait');
         $nama_tgl = date('dmY');
         $nama_jam = date('His');
 

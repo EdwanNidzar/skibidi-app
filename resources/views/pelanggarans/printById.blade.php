@@ -13,12 +13,17 @@
   <style type="text/css" media="print">
     @page {
       size: auto;
+      /* auto is the initial value */
       margin: 0mm;
+      /* this affects the margin in the printer settings */
     }
   </style>
   <style>
     body {
-      font-family: 'Calibri', sans-serif;
+      font-family: Calibri, sans-serif;
+    }
+
+    .sheet {
       padding: 15mm;
     }
 
@@ -28,81 +33,34 @@
     }
 
     h1 {
-      font-size: 24px;
+      font-size: 18px;
+      text-decoration: underline;
       margin-top: 20px;
-      text-align: center;
-      text-transform: uppercase;
     }
 
     .table {
-      width: 100%;
+      border: solid 1px #DDEEEE;
       border-collapse: collapse;
+      border-spacing: 0;
+      font: normal 13px Arial, sans-serif;
+      width: 100%;
       margin-top: 20px;
     }
 
-    .table th,
-    .table td {
-      border: 1px solid #ddd;
-      padding: 8px;
+    .table thead th {
+      background-color: #DDEFEF;
+      border: solid 1px #DDEEEE;
+      color: #336B6B;
+      padding: 10px;
       text-align: left;
+      text-shadow: 1px 1px 1px #fff;
     }
 
-    .table th {
-      background-color: #f2f2f2;
+    .table tbody td {
+      border: solid 1px #DDEEEE;
       color: #333;
-      text-align: center;
-    }
-
-    .table tbody tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-
-    .left-align {
-      text-align: left;
-    }
-
-    .right-align {
-      text-align: right;
-    }
-
-    .clearfix::after {
-      content: "";
-      clear: both;
-      display: table;
-    }
-
-    .signature {
-      float: right;
-      width: 45%;
-      text-align: center;
-    }
-
-    .signature p {
-      margin: 0;
-    }
-
-    .signature p.name {
-      margin-top: 60px;
-      text-decoration: underline;
-      font-weight: bold;
-    }
-
-    .image-container {
-      display: block;
-      margin-top: 10px;
-    }
-
-    .image-container img {
-      display: inline-block;
-      width: 48%;
-      margin-right: 2%;
-      margin-bottom: 10px;
-      max-height: 150px;
-      object-fit: cover;
-    }
-
-    .image-container img:nth-child(2n) {
-      margin-right: 0;
+      padding: 10px;
+      text-shadow: 1px 1px 1px #fff;
     }
   </style>
 </head>
@@ -128,60 +86,102 @@
       <hr style="border-top: 3px solid black; margin-top: 10px; margin-bottom: 10px;">
     </div>
 
-    <h1>{{ $judul }}</h1>
+    <h1 style="text-align: center;">{{ $judul }}</h1>
+
+    <p>Berdasarkan Nomor Surat: <b><u>{{ $pelapor->nomor_surat_kerja }}</u></b>, saya
+      <b><u>{{ $pelapor->name }}</u></b>, sebagai pelapor dari Panwascam, dengan ini melaporkan adanya dugaan
+      pelanggaran kampanye yang terjadi pada:
+    </p>
+
     @foreach ($pelanggaran as $data)
       <table class="table">
         <tbody>
           <tr>
-            <th>Nomor Surat Kerja</th>
-            <td>{{ $data->suratKerja->nomor_surat_kerja }}</td>
+            <th>Tanggal Pelanggaran</th>
+            <td>:</td>
+            <td>{{ $data->tanggal_input }}</td>
           </tr>
           <tr>
-            <th>Nama Partai</th>
+            <th>Nama Peserta Pemilu</th>
+            <td>:</td>
+            <td>{{ $data->nama_bacaleg }}</td>
+          </tr>
+          <tr>
+            <th>Dari Partai</th>
+            <td>:</td>
             <td>{{ $data->parpol->parpol_name }}</td>
           </tr>
           <tr>
             <th>Jenis Pelanggaran</th>
+            <td>:</td>
             <td>{{ $data->jenisPelanggaran->jenis_pelanggaran }}</td>
           </tr>
           <tr>
             <th>Status Peserta Pemilu</th>
+            <td>:</td>
             <td>{{ $data->status_peserta_pemilu }}</td>
           </tr>
           <tr>
-            <th>Nama Peserta Pemilu</th>
-            <td>{{ $data->nama_bacaleg }}</td>
-          </tr>
-          <tr>
             <th>Daerah Pemilihan</th>
+            <td>:</td>
             <td>{{ $data->dapil }}</td>
           </tr>
           <tr>
-            <th>Tanggal Input</th>
-            <td>{{ $data->tanggal_input }}</td>
-          </tr>
-          <tr>
             <th>Keterangan</th>
+            <td>:</td>
             <td>{{ $data->keterangan }}</td>
           </tr>
           <tr>
             <th>Bukti Pendukung</th>
+            <td>:</td>
             <td>
-              <div class="image-container">
                 @foreach ($data->pelanggaranImages as $item)
-                  <img src="{{ public_path('storage/pelanggarans/' . $item->image) }}" alt="Bukti Pendukung">
+                  <img src="{{ public_path('storage/pelanggarans/' . $item->image) }}" alt="Bukti Pendukung" style="max-width: 50%; max-height: 50%;">
                 @endforeach
-              </div>
             </td>
           </tr>
         </tbody>
       </table>
     @endforeach
 
-    <div style="margin-top: 40px;" class="signature">
-      <p>Banjarmasin, {{ \Carbon\Carbon::now()->translatedFormat('l, d F Y') }}</p>
-      <p>Mengetahui</p>
-      <p class="name">Aries Mardiono, M.Sos</p>
+    <p>Sebagai pelapor, kami menyerahkan bukti-bukti terlampir di atas dan meminta kepada pihak yang berwenang untuk melakukan investigasi lebih lanjut serta mengambil tindakan sesuai dengan peraturan yang berlaku.</p>
+
+    <p>Demikian laporan ini dibuat dengan sebenar-benarnya dan dapat digunakan sebagaimana mestinya.</p>
+
+    <div style="margin-top: 20px;">
+      <div class="left-align" style="float: right; width: 45%;">
+        <p>
+          Banjarmasin,
+          <?php
+          // Array mapping English month names to Indonesian
+          $monthNames = [
+              'January' => 'Januari',
+              'February' => 'Februari',
+              'March' => 'Maret',
+              'April' => 'April',
+              'May' => 'Mei',
+              'June' => 'Juni',
+              'July' => 'Juli',
+              'August' => 'Agustus',
+              'September' => 'September',
+              'October' => 'Oktober',
+              'November' => 'November',
+              'December' => 'Desember',
+          ];
+          // Get current date and time
+          $currentDate = date('d F Y');
+          foreach ($monthNames as $english => $indonesian) {
+              $currentDate = str_replace($english, $indonesian, $currentDate);
+          }
+          echo $currentDate;
+          ?>
+          <br>Mengetahui
+        </p>
+        <br>
+        <p class="left-align">
+          <b><u>Aries Mardiono, M.Sos</u></b>
+        </p>
+      </div>
     </div>
   </section>
 </body>

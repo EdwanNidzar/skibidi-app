@@ -160,21 +160,27 @@
     </div>
   </section>
 
-  <!-- Political Parties Section -->
-  <section id="politicalParties" class="py-5 section-header">
-    <div class="container">
-      <h2>Partai Politik</h2>
-      <canvas id="parpolChart" class="small-chart"></canvas>
+  <div class="row">
+    <!-- Political Parties Section -->
+    <div class="col-md-6">
+      <section id="politicalParties" class="py-5 section-header">
+        <div class="container">
+          <h2>Partai Politik</h2>
+          <canvas id="parpolChart" class="small-chart"></canvas>
+        </div>
+      </section>
     </div>
-  </section>
+    <!-- Violation Types Section -->
+    <div class="col-md-6">
+      <section id="violationTypes" class="py-5 section-header">
+        <div class="container">
+          <h2>Jenis Pelanggaran</h2>
+          <canvas id="jenisPelanggaranChart" class="pie-chart"></canvas>
+        </div>
+      </section>
+    </div>
+  </div>
 
-  <!-- Violation Types Section -->
-  <section id="violationTypes" class="py-5 section-header">
-    <div class="container">
-      <h2>Jenis Pelanggaran</h2>
-      <canvas id="jenisPelanggaranChart" class="pie-chart"></canvas>
-    </div>
-  </section>
 
   <!-- Dapil Section -->
   <section id="dapil" class="py-5 section-header">
